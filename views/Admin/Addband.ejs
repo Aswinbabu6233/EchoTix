@@ -1,0 +1,29 @@
+<div class="main-container">
+  <div class="sub-container">
+    <h2>Band Creation</h2>
+    <% if (errors && errors.length > 0) { %>
+    <ul class="error-messages">
+      <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <form
+      action="/admin/create/bandsubmit"
+      method="post"
+      class="Bandform"
+      enctype="multipart/form-data"
+    >
+      <label for="bandname">Band Name:</label>
+      <input type="text" name="bandname" />
+
+      <label for="banddiscription">Band Description:</label>
+      <textarea name="banddiscription" id="banddiscription" rows="5"></textarea>
+
+      <label for="bandimg">Band Img</label>
+      <input type="file" name="bandimg" id="bandimg" />
+
+      <button type="submit">Create Band</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="main-container">
+  <div class="sub-container">
+    <h2>Artist Creation</h2>
+    <% if (errors && errors.length > 0) { %>
+    <ul class="error-messages">
+      <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <form
+      action="/admin/artists"
+      method="POST"
+      enctype="multipart/form-data"
+      id="artistForm"
+    >
+      <label>Select Band</label>
+      <select name="bandId" required>
+        <% bands.forEach(band => { %>
+        <option value="<%= band._id %>"><%= band.name %></option>
+        <% }) %>
+      </select>
+
+      <div id="artistInputs">
+        <div class="artistGroup">
+          <input type="text" name="name[]" placeholder="Artist name" required />
+          <input
+            type="text"
+            name="role[]"
+            placeholder="Role (e.g., Drummer)"
+            required
+          />
+          <input type="file" name="photos" required />
+        </div>
+      </div>
+
+      <button type="button" class="add-btn" onclick="addArtist()">
+        + Add Another Artist
+      </button>
+      <button type="submit" class="submit-btn">Create Artists</button>
+    </form>
+  </div>
+</div>

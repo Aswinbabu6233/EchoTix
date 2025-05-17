@@ -1,0 +1,121 @@
+<div class="main-container">
+  <div class="innercontainer">
+    <section class="herosection">
+      <h1><%= concert.title %></h1>
+
+      <% if (concert.concertImage && concert.concertImage.data) { %>
+      <img
+        class="concert-banner"
+        src="data:<%= concert.concertImage.contentType %>;base64,<%= concert.concertImage.data.toString('base64') %>"
+        alt="Concert Banner"
+      />
+      <% } %>
+      <p class="subtitle">
+        Experience the thrill of live music with
+        <span><a href=""><%=concert.band.name%>!</a></span>
+      </p>
+    </section>
+    <section class="concert-overview">
+      <div class="overview">
+        <h3>About The Event</h3>
+        <p class="main"><%= concert.description %></p>
+
+        <h3>Artists</h3>
+        <%if(artists && artists.length > 0){%>
+        <%artists.forEach(function(artist){%>
+        <div class="artistlist">
+          <div class="artist">
+            <a href="/artist/<%= artist._id %>">
+              <img
+                src="data:<%= artist.photo.contentType %>;base64,<%= artist.photo.data.toString('base64') %>"
+                alt="<%= artist.name %>"
+              />
+              <h4><%= artist.name %></h4>
+              <p><%= artist.role %></p>
+            </a>
+          </div>
+        </div>
+        <% })%> <% }else{%>
+        <p>No artists added yet.</p>
+        <% }%>
+
+        <h3>Find Us Here</h3>
+        <% if (concert.locationMapUrl) { %>
+        <iframe
+          src="<%= concert.locationMapUrl %>"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+        <% } else { %>
+        <p>Location map will be updated soon.</p>
+        <% } %>
+
+        <div class="why-section">
+          <h3>Why You Shouldn’t Miss It</h3>
+          <ul class="why-list">
+            <li><i class="fa-solid fa-bolt"></i> Electric live atmosphere</li>
+            <li><i class="fa-solid fa-music"></i> Best of rock, indie & pop</li>
+            <li>
+              <i class="fa-solid fa-camera-retro"></i> Instagram-worthy visuals
+            </li>
+            <li><i class="fa-solid fa-burger"></i> Food & drinks available</li>
+            <li>
+              <i class="fa-solid fa-gift"></i> Surprise giveaways and merch
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="rightfixed">
+        <h3>Event Details</h3>
+
+        <p>
+          <i class="fa-regular fa-calendar"></i>
+          <span
+            ><%= new Date(concert.date).toLocaleDateString("en-US", { year:
+            'numeric', month: 'long', day: 'numeric' }) %></span
+          >
+        </p>
+        <p>
+          <i class="fa-regular fa-clock"></i>
+          <span><%= concert.time12hr %></span>
+        </p>
+        <p>
+          <i class="fa-regular fa-hourglass-half"></i>
+          <span><%=concert.durationFormatted%></span>
+        </p>
+        <p><i class="fa-solid fa-people-group"></i> Age Limit - 16yrs +</p>
+        <% if (concert.bookingEndsAt) { %>
+        <p>
+          <i class="fa-regular fa-calendar-xmark"></i> <%= new
+          Date(concert.bookingEndsAt).toLocaleString() %>
+        </p>
+        <% } %>
+        <p>
+          <i class="fa-solid fa-location-crosshairs"></i>
+          <span><%= concert.venue %></span>
+        </p>
+        <hr />
+        <div class="booksection">
+          <div class="price">
+            <p>₹ <%=concert.ticketPrice%></p>
+            <% if(concert.ticketsAvailable>0 ){%>
+            <p class="available">Available</p>
+            <% }else{%>
+            <p class="soldout">Sold Out</p>
+            <% }%>
+          </div>
+          <div class="bookbtn">
+            <% if(concert.ticketsAvailable>0){%>
+            <a href="/concert/<%= concert._id %>/book">Book Now</a>
+            <%}%>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="user-reviews">
+      <h3>User Reviews</h3>
+    </section>
+  </div>
+</div>

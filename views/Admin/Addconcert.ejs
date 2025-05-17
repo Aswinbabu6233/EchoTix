@@ -1,0 +1,137 @@
+<div class="main-container">
+  <div class="sub-container">
+    <h2>Create Concert</h2>
+
+    <% if (errors && errors.length > 0) { %>
+    <ul class="error-messages">
+      <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+
+    <form
+      action="/admin/concerts"
+      method="POST"
+      enctype="multipart/form-data"
+      class="Bandform"
+    >
+      <label for="title">Concert Title:</label>
+      <input
+        type="text"
+        name="title"
+        id="title"
+        placeholder="Enter concert title"
+        required
+      />
+
+      <label for="description">Description:</label>
+      <textarea
+        name="description"
+        id="description"
+        placeholder="Write a short description"
+        rows="4"
+        required
+      ></textarea>
+
+      <label for="date">Concert Date:</label>
+      <input type="date" name="date" id="date" required />
+
+      <label for="time">Start Time:</label>
+      <input type="time" name="time" id="time" required />
+
+      <label for="duration">Duration (in minutes):</label>
+      <input
+        type="number"
+        name="duration"
+        id="duration"
+        placeholder="e.g., 120"
+        required
+      />
+
+      <label for="City">City</label>
+      <input
+        type="text"
+        name="city"
+        id="city"
+        placeholder="e.g., Kochi"
+        required
+      />
+
+      <label for="venue">Venue:</label>
+      <input
+        type="text"
+        name="venue"
+        id="venue"
+        placeholder="e.g., Madison Square Garden"
+        required
+      />
+
+      <label for="locationMapUrl">Google Maps Embed URL:</label>
+      <input
+        type="url"
+        name="locationMapUrl"
+        id="locationMapUrl"
+        placeholder="Paste iframe embed src link here"
+        required
+      />
+
+      <label for="ticketPrice">Ticket Price (₹):</label>
+      <input
+        type="number"
+        name="ticketPrice"
+        id="ticketPrice"
+        placeholder="e.g., 499"
+        required
+      />
+
+      <label for="totalTickets">Total Tickets:</label>
+      <input
+        type="number"
+        name="totalTickets"
+        id="totalTickets"
+        placeholder="e.g., 300"
+        required
+      />
+
+      <label for="ticketsAvailable">Tickets Available:</label>
+      <input
+        type="number"
+        name="ticketsAvailable"
+        id="ticketsAvailable"
+        placeholder="e.g., 200"
+        required
+      />
+
+      <label for="bookingEndsAt">Booking Ends At:</label>
+      <input type="datetime-local" name="bookingEndsAt" id="bookingEndsAt" />
+
+      <label for="band">Select Band:</label>
+      <select name="band" id="band" required>
+        <option value="">-- Choose a band --</option>
+        <% bands.forEach(band => { %>
+        <option value="<%= band._id %>"><%= band.name %></option>
+        <% }) %>
+      </select>
+
+      <label for="tags">Tags (comma-separated):</label>
+      <input
+        type="text"
+        name="tags"
+        id="tags"
+        placeholder="e.g., rock,live,festival"
+      />
+
+      <label for="concertImage">Concert Banner:</label>
+      <input
+        type="file"
+        name="concertImage"
+        id="concertImage"
+        accept="image/*"
+        required
+      />
+
+      <button type="submit">Create Concert</button>
+    </form>
+  </div>
+</div>

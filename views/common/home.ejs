@@ -1,0 +1,75 @@
+<div class="main-container">
+  <div class="innercontainer">
+    <section class="top-section">
+      <h1>Feel the Sound. Book the Experience.</h1>
+      <h3>
+        Discover concerts, explore bands, and reserve your vibe — all in one place.
+      </h3>
+
+      <!-- Search Bar -->
+      <div class="searchandcity">
+        <form action="/" method="GET" id="filterForm">
+          <div class="searchsection">
+            <input
+            type="text"
+            name="query"
+            placeholder="Search for concerts, bands or tags..."
+            value="<%= query || '' %>"
+            required
+          />
+          <button type="submit"><i class="fas fa-search"></i></button>
+          </div>
+
+          <!-- City Filter -->
+         <div class="cityselection">
+          <label for="city">Select City:</label>
+          <select name="city" id="city" onchange="document.getElementById('filterForm').submit()">
+            <option value="All" <%= selectedCity === 'All' ? 'selected' : '' %>>All</option>
+            <% if (cities && cities.length > 0) { %>
+              <% cities.forEach(function(c) { %>
+                <option value="<%= c %>" <%= selectedCity === c ? 'selected' : '' %>><%= c %></option>
+              <% }) %>
+            <% } %>
+          </select>
+        </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Concert Cards -->
+    <section class="concert-section">
+      <% if (concerts && concerts.length > 0) { %>
+        <% concerts.forEach(function(concert) { %>
+          <div class="concert-card">
+            <a href="/concert/<%= concert._id %>">
+              <img
+              src="data:<%= concert.concertImage.contentType %>;base64,<%= concert.concertImage.data.toString('base64') %>"
+              alt="concert image"
+              loading="lazy"
+            />
+            </a>
+            <div class="concert-details">
+              <a href="/concert/<%= concert._id %>"><h2><%= concert.title %></h2></a>
+              <a href="/concert/band/<%= concert.band._id%>"><h6><%= concert.band?.name || "Unknown Band" %></h6></a>
+              <p>Venue: <span><%= concert.venue %></span></p>
+              <p>
+                Date:
+                <span>
+                  <%= new Date(concert.date).toLocaleDateString("en-US", {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  }) %>
+                </span>
+              </p>
+              <p>Time: <span><%= concert.time12hr %></span></p>
+              <a href="/concert/<%= concert._id %>" class="book-btn">Book Now 🎫</a>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No concerts found<%= selectedCity && selectedCity !== 'All' ? ` in ${selectedCity}` : '' %>.</p>
+      <% } %>
+    </section>
+  </div>
+</div>

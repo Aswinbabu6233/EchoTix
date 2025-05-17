@@ -1,0 +1,55 @@
+<div class="main-container">
+  <div class="random-container">
+    <div class="random-left">
+      <h1><%= band.name %></h1>
+      <p><%= band.discription %></p>
+
+      <h3>Main Artists</h3>
+      <div class="main-artist-group">
+        <% if (artists && artists.length > 0) { %> <%
+        artists.forEach(function(artist) { %>
+        <div class="main-artist-card">
+          <div class="artist-image">
+            <img
+              src="data:<%= artist.photo.contentType %>;base64,<%= artist.photo.data.toString('base64') %>"
+              alt="<%= artist.name %>"
+            />
+          </div>
+          <h5><%= artist.name %></h5>
+          <p><%= artist.role %></p>
+        </div>
+        <% }); %> <% } else { %>
+        <p>No artists added yet.</p>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="random-right">
+      <div class="randomband-img">
+        <img
+          src="data:<%= band.image.contentType %>;base64,<%= band.image.data.toString('base64') %>"
+          alt="<%= band.name %>"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="band-work">
+    <% if(concerts && concerts.length >0 )%> <%{
+    concerts.forEach(function(concert) { %>
+    <div class="programs">
+      <div class="work-img">
+        <img
+          src="data:<%= concert.concertImage.contentType %>;base64,<%= concert.concertImage.data.toString('base64') %>"
+          alt="<%= concert.title %>"
+        />
+      </div>
+      <div class="workdetails">
+        <h3><%= concert.title %></h3>
+        <h4><%= concert.venue %></h4>
+        <p><%= concert.description %></p>
+      </div>
+    </div>
+    <% }); %> <%} %>
+  </div>
+</div>
