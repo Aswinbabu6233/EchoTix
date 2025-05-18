@@ -12,7 +12,11 @@
       <% } %>
       <p class="subtitle">
         Experience the thrill of live music with
-        <span><a href=""><%=concert.band.name%>!</a></span>
+        <span
+          ><a href="/concert/band/<%= concert.band._id%>"
+            ><%=concert.band.name%>!</a
+          ></span
+        >
       </p>
     </section>
     <section class="concert-overview">

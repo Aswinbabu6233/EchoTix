@@ -6,6 +6,35 @@ const Artists = require("../model/artistmodel");
 
 router.get("/", async (req, res) => {
   try {
+    // Fetch concerts with populated band info
+    const concerts = await Concert.find({})
+      .populate("band")
+      .sort({ date: 1 })
+      .lean();
+
+    // Get city list for dropdown
+    const cities = (await Concert.distinct("city")).sort();
+
+    // Convert time
+    concerts.forEach((concert) => {
+      concert.time12hr = convertTo12Hour(concert.time);
+    });
+
+    res.render("common/home", {
+      concerts,
+
+      convertTo12Hour,
+      errors: [],
+    });
+  } catch (error) {
+    console.error("Error loading concerts:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+// contert list
+router.get("/concert/list", async (req, res) => {
+  try {
     const { city, query } = req.query;
     const cityFilter = city && city.toLowerCase() !== "all" ? { city } : {};
 
@@ -29,14 +58,10 @@ router.get("/", async (req, res) => {
         ],
       }),
     };
-
-    // Fetch concerts with populated band info
     const concerts = await Concert.find(concertQuery)
       .populate("band")
       .sort({ date: 1 })
       .lean();
-
-    // Get city list for dropdown
     const cities = (await Concert.distinct("city")).sort();
 
     // Convert time
@@ -44,7 +69,7 @@ router.get("/", async (req, res) => {
       concert.time12hr = convertTo12Hour(concert.time);
     });
 
-    res.render("common/home", {
+    res.render("common/concertlist", {
       concerts,
       cities,
       selectedCity: city || "All",
@@ -57,15 +82,6 @@ router.get("/", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
-// Time format helper
-function convertTo12Hour(time24) {
-  const [hourStr, minuteStr] = time24.split(":");
-  let hour = parseInt(hourStr);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  hour = hour % 12 || 12;
-  return `${hour}:${minuteStr} ${ampm}`;
-}
-
 // concert detail
 router.get("/concert/:id", async (req, res) => {
   try {
@@ -86,7 +102,7 @@ router.get("/concert/:id", async (req, res) => {
 
     concert.time12hr = convertTo12Hour(concert.time);
 
-    res.render("common/concert", { artists, concert });
+    res.render("common/concertdetail", { artists, concert });
   } catch (error) {
     console.error("Error loading concert:", error);
     res.status(500).send("Server Error");
@@ -104,5 +120,14 @@ router.get("/concert/band/:id", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+// Time format helper
+function convertTo12Hour(time24) {
+  const [hourStr, minuteStr] = time24.split(":");
+  let hour = parseInt(hourStr);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${minuteStr} ${ampm}`;
+}
 
 module.exports = router;

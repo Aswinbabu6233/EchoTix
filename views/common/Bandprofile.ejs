@@ -35,7 +35,7 @@
   </div>
 
   <div class="band-work">
-    <% if(concerts && concerts.length >0 )%> <%{
+    <% if (concerts && concerts.length > 0) { %> <%
     concerts.forEach(function(concert) { %>
     <div class="programs">
       <div class="work-img">
@@ -49,7 +49,18 @@
         <h4><%= concert.venue %></h4>
         <p><%= concert.description %></p>
       </div>
+      <div class="status">
+        <h4><%= concert.status %></h4>
+        <p>
+          Date: <%= new Date(concert.date).toLocaleDateString("en-US", { year:
+          'numeric', month: 'long', day: 'numeric' }) %>
+        </p>
+      </div>
     </div>
-    <% }); %> <%} %>
+    <% }); %> <% } else { %>
+    <p style="text-align: center; color: #fff">
+      No concerts available at the moment.
+    </p>
+    <% } %>
   </div>
 </div>

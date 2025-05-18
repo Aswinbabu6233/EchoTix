@@ -1,3 +1,8 @@
+//toggle button
+let toggleButton = document.getElementById("dropdown");
+function toggle() {
+  toggleButton.classList.toggle("show");
+}
 // Add Artist dynamic button
 function addArtist() {
   const container = document.getElementById("artistInputs");

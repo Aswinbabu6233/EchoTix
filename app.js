@@ -8,6 +8,7 @@ var indexRouter = require("./routes/index");
 var adminRouter = require("./routes/admin");
 var userRouter = require("./routes/user");
 const session = require("express-session");
+const User = require("./model/usermodel");
 
 const expressLayouts = require("express-ejs-layouts");
 
@@ -28,13 +29,30 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  const user = req.session.user;
-
-  res.locals.userpresent = user && user.role === "user";
-  res.locals.adminpresent = user && user.role === "admin";
-  res.locals.username = user ? user.username : null;
-
+app.use(async (req, res, next) => {
+  if (req.session.user && req.session.user._id) {
+    try {
+      const user = await User.findById(req.session.user._id).lean();
+      if (user) {
+        res.locals.userdetails = user;
+        res.locals.userpresent = user.role === "user";
+        res.locals.adminpresent = user.role === "admin";
+      } else {
+        res.locals.userdetails = null;
+        res.locals.userpresent = false;
+        res.locals.adminpresent = false;
+      }
+    } catch (err) {
+      console.error("Session fetch error:", err);
+      res.locals.userdetails = null;
+      res.locals.userpresent = false;
+      res.locals.adminpresent = false;
+    }
+  } else {
+    res.locals.userdetails = null;
+    res.locals.userpresent = false;
+    res.locals.adminpresent = false;
+  }
   next();
 });
 

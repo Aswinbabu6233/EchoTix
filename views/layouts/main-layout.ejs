@@ -20,21 +20,66 @@
         <nav>
           <ul class="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="/concerts">Artists</a></li>
-            <li><a href="/concerts">Contact</a></li>
+            <li><a href="/concert/list">Concerts</a></li>
+            <li><a href="/concerts/Artists">Artists</a></li>
           </ul>
-          <% if(userpresent){%>
-          <div class="header-right">
-            <button><i class="fa-regular fa-user"></i> <%= username %></button>
-            <a href="/logout">Logout</a>
+
+          <% if (userpresent) { %> <% if (!userdetails?.profileImage?.data) { %>
+          <img
+            class="profilepic"
+            src="/images/Agam-Band.jpg"
+            alt="default profile"
+            onclick="toggle()"
+          />
+          <% } else { %>
+          <img
+            class="profilepic"
+            src="data:<%= userdetails.profileImage.contentType %>;base64,<%= userdetails.profileImage.data.toString('base64') %>"
+            alt="profile image"
+            loading="lazy"
+            onclick="toggle()"
+          />
+          <% } %>
+
+          <div class="dropdown-wraper" id="dropdown">
+            <div class="submenu">
+              <div class="userinfo">
+                <% if (userdetails?.profileImage?.data) { %>
+                <img
+                  src="data:<%= userdetails.profileImage.contentType %>;base64,<%= userdetails.profileImage.data.toString('base64') %>"
+                  alt="profile"
+                />
+                <% } else { %>
+                <img src="/images/Agam-Band.jpg" alt="default" />
+                <% } %>
+                <h4><%= userdetails?.username || 'User' %></h4>
+              </div>
+              <hr />
+              <a href="/user/profile" class="submenu-link">
+                <i class="fas fa-user"></i>
+                <p>My Profile</p>
+                <span><i class="fa-solid fa-angle-right"></i></span>
+              </a>
+              <a href="/user/tickets" class="submenu-link">
+                <i class="fa-solid fa-ticket"></i>
+                <p>My Tickets</p>
+                <span><i class="fa-solid fa-angle-right"></i></span>
+              </a>
+              <a href="/user/logout" class="submenu-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <p>Logout</p>
+                <span><i class="fa-solid fa-angle-right"></i></span>
+              </a>
+            </div>
           </div>
-          <% }else{%>
+
+          <% } else { %>
           <div class="header-right">
-            <a href="/user/login"
-              ><i class="fa-regular fa-user"></i> Login/Register</a
-            >
+            <a href="/user/login">
+              <i class="fa-regular fa-user"></i> Login/Register
+            </a>
           </div>
-          <% }%>
+          <% } %>
         </nav>
       </div>
     </header>

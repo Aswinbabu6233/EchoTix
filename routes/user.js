@@ -69,7 +69,7 @@ router.post(
         },
       });
       await newuser.save();
-      req.session.user = newuser;
+      req.session.user = { _id: newuser._id };
       res.redirect("/");
     } catch (error) {
       console.error("Registration error:", error);
@@ -84,41 +84,43 @@ router.get("/login", (req, res) => {
   res.render("common/login", { errors: [] });
 });
 
-router.post("/Login", async (req, res) => {
-  const { identifier, password } = req.body;
-
-  try {
-    // Find user by email or username (case-insensitive)
-    const user = await User.findOne({
-      $or: [
-        { email: identifier.toLowerCase() },
-        { username: identifier.toLowerCase() },
-      ],
-    });
-
-    if (!user) {
-      return res.render("common/login", {
-        errors: [{ msg: "Invalid username/email or password" }],
-      });
+router.post(
+  "/Login",
+  [
+    body("email").isEmail().withMessage("Valid Email is required"),
+    body("password").notEmpty().withMessage("Password is required"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("common/login", { errors: errors.array() });
     }
 
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.render("common/login", {
-        errors: [{ msg: "Invalid username/email or password" }],
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.render("common/login", {
+          errors: [{ msg: "Email not found" }],
+        });
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.render("common/login", {
+          errors: [{ msg: "Incorrect password" }],
+        });
+      }
+      req.session.user = { _id: user._id };
+      res.redirect("/");
+    } catch (err) {
+      console.error("Login error:", err);
+      res.render("common/login", {
+        errors: [{ msg: "Server error. Please try again later." }],
       });
+    } finally {
+      req.session.save();
     }
-    req.session.user = user;
-    // Login successful – add session logic or redirect
-    // For now just redirecting to home or dashboard
-    res.redirect("/"); // Replace with /dashboard or user profile route
-  } catch (err) {
-    console.error("Login error:", err);
-    res.render("common/login", {
-      errors: [{ msg: "Server error. Please try again later." }],
-    });
   }
-});
+);
 
 module.exports = router;
