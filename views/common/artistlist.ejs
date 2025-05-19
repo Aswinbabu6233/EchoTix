@@ -1,0 +1,26 @@
+<div class="main-container">
+  <div class="inner-container">
+    <section class="top-section">
+      <h1>Meet the Artists behind the music</h1>
+      <h3>Discover the diverse talents of EchoTix's artists</h3>
+    </section>
+    <section class="hero-artist-section">
+      <% if (artists && artists.length > 0) { %> <%
+      artists.forEach(function(artist) { %>
+      <a href="/artist/<%= artist._id %>">
+        <div class="artistlist-card">
+          <div class="artists-image">
+            <img
+              src="data:<%= artist.photo.contentType %>;base64,<%= artist.photo.data.toString('base64') %>"
+              alt="<%= artist.name %>"
+            />
+          </div>
+          <div class="artist-name-div">
+            <h3 class="artist-name"><%= artist.name %></h3>
+          </div>
+        </div>
+      </a>
+      <% }); %> <% } %>
+    </section>
+  </div>
+</div>

@@ -4,25 +4,41 @@ const Concert = require("../model/concertmodel");
 const Band = require("../model/bandmodel");
 const Artists = require("../model/artistmodel");
 
+// home
 router.get("/", async (req, res) => {
   try {
-    // Fetch concerts with populated band info
+    // Fetch all concerts with band info
     const concerts = await Concert.find({})
       .populate("band")
       .sort({ date: 1 })
       .lean();
 
-    // Get city list for dropdown
-    const cities = (await Concert.distinct("city")).sort();
+    // Get 4 random artists
+    const countArtists = await Artists.countDocuments();
+    const randomIndexes = new Set();
 
-    // Convert time
-    concerts.forEach((concert) => {
+    while (randomIndexes.size < 4 && randomIndexes.size < countArtists) {
+      randomIndexes.add(Math.floor(Math.random() * countArtists));
+    }
+
+    const randomArtists = await Promise.all(
+      Array.from(randomIndexes).map((i) => Artists.findOne().skip(i))
+    );
+
+    // Limit concerts to first 8
+    const totalConcerts = concerts.length;
+    const concertsToShow = concerts.slice(0, 8);
+
+    // Convert time format
+    concertsToShow.forEach((concert) => {
       concert.time12hr = convertTo12Hour(concert.time);
     });
 
+    // ✅ Only render once
     res.render("common/home", {
-      concerts,
-
+      concerts: concertsToShow,
+      randomArtists,
+      totalConcerts,
       convertTo12Hour,
       errors: [],
     });
@@ -108,6 +124,7 @@ router.get("/concert/:id", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+// band profile
 
 router.get("/concert/band/:id", async (req, res) => {
   try {
@@ -117,6 +134,17 @@ router.get("/concert/band/:id", async (req, res) => {
     res.render("common/Bandprofile", { band, concerts, artists });
   } catch (error) {
     console.error("Error loading band:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+// artistlist
+router.get("/artists/list", async (req, res) => {
+  try {
+    const artists = await Artists.find().populate("band").lean();
+    res.render("common/artistlist", { artists, errors: [] });
+  } catch (error) {
+    console.error("Error loading artists:", error);
     res.status(500).send("Server Error");
   }
 });

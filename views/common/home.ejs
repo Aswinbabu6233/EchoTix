@@ -6,8 +6,6 @@
         Discover concerts, explore bands, and reserve your vibe — all in one
         place.
       </h3>
-
-      <!-- Search Bar -->
     </section>
 
     <!-- Concert Cards -->
@@ -26,7 +24,7 @@
           <a href="/concert/<%= concert._id %>"
             ><h2><%= concert.title %></h2></a
           >
-          <a href="/concert/band/<%= concert.band._id%>"
+          <a href="/concert/band/<%= concert.band._id %>"
             ><h6><%= concert.band?.name || "Unknown Band" %></h6></a
           >
           <p>Venue: <span><%= concert.venue %></span></p>
@@ -41,12 +39,60 @@
           <a href="/concert/<%= concert._id %>" class="book-btn">Book Now 🎫</a>
         </div>
       </div>
-      <% }) %> <% } else { %>
+      <% }) %> <% if (typeof totalConcerts !== 'undefined' && totalConcerts > 7)
+      { %>
+      <div class="concert-card view-more-card">
+        <a href="/concert/list">
+          <div class="view-more-content">
+            <h2>View More Concerts</h2>
+            <p>See all available concerts</p>
+          </div>
+        </a>
+      </div>
+      <% } %> <% } else { %>
       <p>
         No concerts found<%= selectedCity && selectedCity !== 'All' ? ` in
         ${selectedCity}` : '' %>.
       </p>
       <% } %>
+    </section>
+
+    <!-- artist -->
+    <section class="artist-section">
+      <div class="artist-left">
+        <h2>Meet the Faces Behind the Music</h2>
+        <p>
+          At EchoTix, we bring you closer to the talent that lights up the
+          stage. Discover the artists and bands who turn every concert into an
+          unforgettable experience. Explore their stories, follow their
+          journeys, and be part of the rhythm that connects us all.
+        </p>
+
+        <div class="viewmorebtn">
+          <a href="/artists/list">View All Artists</a>
+          <span class="arrow-circle">
+            <i class="fa-solid fa-arrow-right"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="artist-right">
+        <div class="artist-group">
+          <% randomArtists.forEach((artist, index) => { %>
+          <div
+            class="artistpic <%= index === 0 ? 'large' : '' %> <%= index === 2 ? 'wide' : '' %> <%= index === 3 ? 'tall' : '' %>"
+          >
+            <a href="/artist/<%= artist._id %>">
+              <img
+                src="data:<%= artist.photo.contentType %>;base64,<%= artist.photo.data.toString('base64') %>"
+                alt="artist image"
+                loading="lazy"
+              />
+            </a>
+          </div>
+          <% }) %>
+        </div>
+      </div>
     </section>
   </div>
 </div>
