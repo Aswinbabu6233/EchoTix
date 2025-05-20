@@ -28,6 +28,10 @@ app.use(
     saveUninitialized: true,
   })
 );
+app.use((req, res, next) => {
+  res.locals.hidenav = false;
+  next();
+});
 
 app.use(async (req, res, next) => {
   if (req.session.user && req.session.user._id) {

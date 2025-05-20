@@ -149,6 +149,20 @@ router.get("/artists/list", async (req, res) => {
   }
 });
 
+// artist profile detail
+router.get("/artist/:id", async (req, res) => {
+  try {
+    const artist = await Artists.findById(req.params.id)
+      .populate("band")
+      .lean();
+    const concerts = await Concert.find({ band: artist.band._id }).lean();
+    res.render("common/artistprofile", { artist, concerts, errors: [] });
+  } catch (error) {
+    console.error("Error loading artist:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
 // Time format helper
 function convertTo12Hour(time24) {
   const [hourStr, minuteStr] = time24.split(":");

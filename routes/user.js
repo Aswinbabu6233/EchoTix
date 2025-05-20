@@ -63,10 +63,12 @@ router.post(
         username: username.trim(),
         email: email.trim(),
         password: hashedPassword,
-        profileImage: {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        },
+        profileImage: req.file
+          ? {
+              data: req.file.buffer,
+              contentType: req.file.mimetype,
+            }
+          : undefined,
       });
       await newuser.save();
       req.session.user = { _id: newuser._id };
@@ -98,10 +100,10 @@ router.post(
 
     try {
       const { email, password } = req.body;
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email, role: "user" });
       if (!user) {
         return res.render("common/login", {
-          errors: [{ msg: "Email not found" }],
+          errors: [{ msg: "User not found or invalid email" }],
         });
       }
       const isMatch = await bcrypt.compare(password, user.password);
@@ -110,7 +112,11 @@ router.post(
           errors: [{ msg: "Incorrect password" }],
         });
       }
-      req.session.user = { _id: user._id };
+      req.session.user = {
+        _id: user._id,
+        role: user.role,
+        username: user.username,
+      };
       res.redirect("/");
     } catch (err) {
       console.error("Login error:", err);
@@ -122,5 +128,14 @@ router.post(
     }
   }
 );
+// logout route
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Logout error:", err);
+    }
+    res.redirect("/");
+  });
+});
 
 module.exports = router;

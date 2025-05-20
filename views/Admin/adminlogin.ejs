@@ -1,0 +1,43 @@
+<div class="main-container">
+  <div class="sub-container">
+    <h2>Admin Login</h2>
+    <p class="Welcome-p">
+      Welcome back, Admin! Log in to access the EchoTix dashboard and manage
+      concerts and bookings.
+    </p>
+
+    <% if (errors && errors.length > 0) { %>
+    <ul class="error-messages">
+      <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+
+    <form action="/admin/adminlogin" method="POST" class="Bandform">
+      <label for="email">Admin Email:</label>
+      <div class="input-icon">
+        <i class="fa-solid fa-user"></i>
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter yor Email"
+          required
+        />
+      </div>
+
+      <label for="password">Password:</label>
+      <div class="input-icon">
+        <i class="fa-solid fa-lock"></i>
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button class="adminbtn" type="submit">Login</button>
+    </form>
+  </div>
+</div>

@@ -236,6 +236,64 @@ nav ul li a:hover::after {
 .header-right button:hover {
   background-color: #fa0c1c;
 }
+/* admin nav */
+.admin-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.admin-links {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.admin-links li {
+  position: relative;
+}
+
+.admin-links a {
+  font-weight: 500;
+  color: #ffffff;
+  transition: color 0.3s;
+}
+
+.admin-links a:hover {
+  color: #ff4754;
+}
+
+.dropdown-parent:hover .dropdown {
+  display: block;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #222;
+  border-radius: 6px;
+  padding: 10px 0;
+  min-width: 150px;
+  z-index: 10;
+}
+
+.dropdown li {
+  padding: 8px 20px;
+}
+
+.dropdown li a {
+  color: #cacaca;
+  font-size: 14px;
+}
+
+.dropdown li a:hover {
+  color: #ffffff;
+  font-weight: 600;
+}
+
 /* home */
 
 .top-section {
@@ -836,6 +894,9 @@ iframe {
   font-weight: 600;
   transition: background-color 0.3s ease;
 }
+.Bandform .adminbtn {
+  margin-bottom: 20px;
+}
 .Bandform p {
   margin-top: 10px;
   font-size: 1rem;
@@ -1198,4 +1259,78 @@ button.submit-btn:hover {
   font-weight: 600;
   color: #dfdfdf;
   margin: 0;
+}
+
+/* admin Dashboard */
+
+.admin-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.admin-top h1 {
+  font-size: 2rem;
+  color: #999;
+  text-align: start;
+}
+.summary-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1300px;
+  margin: 40px auto;
+}
+
+.card {
+  flex: 1 1 calc(25% - 20px);
+  min-width: 250px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #2a2a2a;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.card span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  background-color: #522424;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.card span i {
+  font-size: 1rem;
+}
+
+.card p {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  color: #cfcfcf;
 }

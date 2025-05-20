@@ -8,16 +8,18 @@
       <div class="main-artist-group">
         <% if (artists && artists.length > 0) { %> <%
         artists.forEach(function(artist) { %>
-        <div class="main-artist-card">
-          <div class="artist-image">
-            <img
-              src="data:<%= artist.photo.contentType %>;base64,<%= artist.photo.data.toString('base64') %>"
-              alt="<%= artist.name %>"
-            />
-          </div>
-          <h5><%= artist.name %></h5>
-          <p><%= artist.role %></p>
-        </div>
+        <a href="/artist/<%= artist._id %>"
+          ><div class="main-artist-card">
+            <div class="artist-image">
+              <img
+                src="data:<%= artist.photo.contentType %>;base64,<%= artist.photo.data.toString('base64') %>"
+                alt="<%= artist.name %>"
+              />
+            </div>
+            <h5><%= artist.name %></h5>
+            <p><%= artist.role %></p>
+          </div></a
+        >
         <% }); %> <% } else { %>
         <p>No artists added yet.</p>
         <% } %>

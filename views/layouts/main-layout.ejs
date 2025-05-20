@@ -14,8 +14,33 @@
     <header>
       <div class="headersection">
         <div class="logo">
+          <% if(adminpresent){%>
+          <a href="/admin/dashboard">ECHOTIX ADMIN</a>
+          <%}else{%>
           <a href="/">ECHOTIX</a>
+          <%}%>
         </div>
+
+        <!-- admin nav -->
+        <% if(!hidenav){%> <%if( adminpresent){%>
+        <nav class="admin-nav">
+          <ul class="admin-links">
+            <li><a href="/admin/dashboard">Dashboard</a></li>
+            <li class="dropdown-parent">
+              <a href="#">Management <i class="fa-solid fa-caret-down"></i></a>
+              <ul class="dropdown">
+                <li><a href="/admin/bands">Bands</a></li>
+                <li><a href="/admin/concerts">Concerts</a></li>
+                <li><a href="/admin/artists">Artists</a></li>
+              </ul>
+            </li>
+            <li><a href="/admin/bookings">Bookings</a></li>
+            <li><a href="/admin/users">Users</a></li>
+            <li><a href="/admin/profile">Profile</a></li>
+          </ul>
+        </nav>
+
+        <%}else{%>
 
         <nav>
           <ul class="nav-links">
@@ -81,6 +106,7 @@
           </div>
           <% } %>
         </nav>
+        <%}%> <%}%>
       </div>
     </header>
 

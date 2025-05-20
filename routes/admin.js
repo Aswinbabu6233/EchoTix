@@ -1,20 +1,101 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 const multer = require("multer");
 const Band = require("../model/bandmodel");
 const Artist = require("../model/artistmodel");
 const Concert = require("../model/concertmodel");
+const User = require("../model/usermodel");
+const { isAdmin } = require("../Middleware/authentication");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// admin login
+
+router.get("/login", (req, res) => {
+  res.render("Admin/adminlogin", { errors: [], hidenav: true });
+});
+
+router.post(
+  "/adminlogin",
+  [
+    body("email").notEmpty().withMessage("Email is required"),
+    body("password").notEmpty().withMessage("Password is required"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("Admin/adminlogin", { errors: errors.array() });
+    }
+    try {
+      const { email, password } = req.body;
+      const emaillowercase = email.toLowerCase();
+      const admin = await User.findOne({
+        email: emaillowercase,
+        role: "admin",
+      });
+      if (!admin) {
+        return res.render("Admin/adminlogin", {
+          errors: [{ msg: "No user found or invalid email" }],
+        });
+      }
+      // show retrive bcrypt password to orginal password
+
+      const isMatch = await bcrypt.compare(password, admin.password);
+      if (!isMatch) {
+        return res.render("Admin/adminlogin", {
+          errors: [{ msg: "Incorrect password" }],
+        });
+      }
+      req.session.user = {
+        _id: admin._id,
+        role: admin.role,
+        username: admin.username,
+      };
+      res.redirect("/admin/dashboard");
+    } catch (error) {
+      console.error("Admin login error:", error);
+      res.status(500).render("Admin/adminlogin", {
+        errors: [{ msg: "Server error. Please try again later." }],
+      });
+    }
+  }
+);
+
+// logout
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Logout error:", err);
+    }
+    res.redirect("/");
+  });
+});
+
+// dashboard
+router.get("/dashboard", isAdmin, async (req, res) => {
+  try {
+    const admin = await User.findById(req.session.user._id);
+    const users = await User.find({});
+    const bands = await Band.find({});
+    const artists = await Artist.find({});
+    const concerts = await Concert.find({});
+    res.render("Admin/dashboard", { bands, artists, concerts, users, admin });
+  } catch (error) {
+    console.error("Error loading dashboard data:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
 // band upload
-router.get("/create/band", async (req, res) => {
+router.get("/create/band", isAdmin, async (req, res) => {
   res.render("Admin/Addband", { errors: [] });
 });
 
 router.post(
   "/create/bandsubmit",
+  isAdmin,
   upload.single("bandimg"),
   [
     body("bandname").notEmpty().withMessage("Band Name is required"),
@@ -60,7 +141,7 @@ router.post(
 );
 
 // GET /create/artist
-router.get("/create/artist", async (req, res) => {
+router.get("/create/artist", isAdmin, async (req, res) => {
   try {
     const bands = await Band.find({});
     res.render("Admin/AddArtist", { bands, errors: [] }); // send bands to EJS
@@ -74,7 +155,7 @@ router.get("/create/artist", async (req, res) => {
 });
 
 // POST route to handle form submission
-router.post("/artists", upload.array("photos"), async (req, res) => {
+router.post("/artists", isAdmin, upload.array("photos"), async (req, res) => {
   const { bandId, name, role } = req.body;
   const photos = req.files;
 
@@ -111,7 +192,7 @@ router.post("/artists", upload.array("photos"), async (req, res) => {
   }
 });
 // concert creation
-router.get("/create/concerts", async (req, res) => {
+router.get("/create/concerts", isAdmin, async (req, res) => {
   try {
     const bands = await Band.find({});
     res.render("Admin/Addconcert", { bands, errors: [] });
@@ -128,6 +209,7 @@ router.get("/create/concerts", async (req, res) => {
 
 router.post(
   "/concerts",
+  isAdmin,
   upload.single("concertImage"),
   [
     body("title").notEmpty().trim().withMessage("Concert title is required"),
@@ -202,7 +284,7 @@ router.post(
         date: new Date(date),
         time: time.trim(),
         duration: parseInt(duration),
-        city: city.trim().tolowerCase(),
+        city: city.trim().toLowerCasease(),
         venue: venue.trim(),
         locationMapUrl: locationMapUrl.trim(),
         ticketPrice: parseFloat(ticketPrice),

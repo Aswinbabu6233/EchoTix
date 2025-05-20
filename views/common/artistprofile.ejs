@@ -1,0 +1,16 @@
+<div class="main-container">
+  <div class="inner-container">
+    <section class="top-section">
+      <div class="artist-left-section">
+        <div class="artist-img">
+          <img
+            src="data:<%= artist.photo.contentType %>;base64,<%= artist.photo.data.toString('base64') %>"
+          />
+        </div>
+        <h1><%= artist.name %></h1>
+        <p><%= artist.discription %></p>
+      </div>
+      <div class="artist-right-section"></div>
+    </section>
+  </div>
+</div>

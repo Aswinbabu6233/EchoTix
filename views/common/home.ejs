@@ -39,7 +39,7 @@
           <a href="/concert/<%= concert._id %>" class="book-btn">Book Now 🎫</a>
         </div>
       </div>
-      <% }) %> <% if (typeof totalConcerts !== 'undefined' && totalConcerts > 7)
+      <% }) %> <% if (typeof totalConcerts !== 'undefined' && totalConcerts > 2)
       { %>
       <div class="concert-card view-more-card">
         <a href="/concert/list">
@@ -68,12 +68,12 @@
           journeys, and be part of the rhythm that connects us all.
         </p>
 
-        <div class="viewmorebtn">
-          <a href="/artists/list">View All Artists</a>
+        <a href="/artists/list" class="viewmorebtn">
+          <div>View All Artists</div>
           <span class="arrow-circle">
             <i class="fa-solid fa-arrow-right"></i>
           </span>
-        </div>
+        </a>
       </div>
 
       <div class="artist-right">
