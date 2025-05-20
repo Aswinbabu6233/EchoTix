@@ -7,6 +7,10 @@ const bandSchema = new mongoose.Schema({
     data: Buffer,
     contentType: String,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 const Band = mongoose.model("Band", bandSchema);
 

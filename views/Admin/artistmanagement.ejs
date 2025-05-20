@@ -1,0 +1,48 @@
+<div class="main-container">
+  <div class="innercontainer">
+    <section class="Manage-top">
+      <h1>Artists Management</h1>
+      <a href="/admin/create/artist" class="add-artist">Add Artist</a>
+    </section>
+    <section class="recentmanagements">
+      <div class="managementstable">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Band</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% artists.forEach(function(show) { %>
+            <tr>
+              <td>
+                <img
+                  src="data:<%= show.photo.contentType %>;base64,<%= show.photo.data.toString('base64') %>"
+                />
+              </td>
+              <td><%= show.name %></td>
+              <td><%= show.role %></td>
+              <td><%= show.band ? show.band.name : "N/A" %></td>
+              <td>
+                <a class="edit" href="/admin/edit/concerts/<%= show._id %>"
+                  ><i class="fa-solid fa-file-pen"></i
+                ></a>
+              </td>
+              <td>
+                <a class="delete" href="/admin/delete/concerts/<%= show._id %>"
+                  ><i class="fa-solid fa-trash"></i
+                ></a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>

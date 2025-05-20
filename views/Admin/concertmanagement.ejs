@@ -1,0 +1,59 @@
+<div class="main-container">
+  <div class="innercontainer">
+    <section class="Manage-top">
+      <h1>Concert Management</h1>
+      <a href="/admin/create/concerts">Add Concert</a>
+    </section>
+    <section class="recentmanagements">
+      <div class="managementstable">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Venue</th>
+              <th>Date</th>
+              <th>city</th>
+              <th>Band</th>
+              <th>ticketPrice</th>
+              <th>totalTickets</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% concerts.forEach(function(show) { %>
+            <tr>
+              <td>
+                <img
+                  src="data:<%= show.concertImage.contentType %>;base64,<%= show.concertImage.data.toString('base64') %>"
+                />
+              </td>
+              <td><%= show.title %></td>
+              <td><%= show.venue %></td>
+              <td>
+                <%= new Date(show.date).toLocaleDateString("en-US", { year:
+                'numeric', month: 'long', day: 'numeric' }) %>
+              </td>
+              <td><%= show.city %></td>
+              <td><%= show.band ? show.band.name : "N/A" %></td>
+              <td>₹<%= show.ticketPrice %></td>
+              <td><%= show.totalTickets %></td>
+              <td>
+                <a class="edit" href="/admin/edit/concerts/<%= show._id %>"
+                  ><i class="fa-solid fa-file-pen"></i
+                ></a>
+              </td>
+              <td>
+                <a class="delete" href="/admin/delete/concerts/<%= show._id %>"
+                  ><i class="fa-solid fa-trash"></i
+                ></a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>

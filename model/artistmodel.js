@@ -8,6 +8,10 @@ const memberSchema = new mongoose.Schema({
     contentType: String,
   },
   band: { type: mongoose.Schema.Types.ObjectId, ref: "Band" },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 const Artist = mongoose.model("Artist", memberSchema);
 module.exports = Artist;

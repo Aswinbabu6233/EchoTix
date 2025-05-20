@@ -1,0 +1,46 @@
+<div class="main-container">
+  <div class="innercontainer">
+    <section class="Manage-top">
+      <h1>Band Management</h1>
+      <a href="/admin/create/band">Add Band</a>
+    </section>
+    <section class="recentmanagements">
+      <div class="managementstable">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% bands.forEach(function(show) { %>
+            <tr>
+              <td>
+                <img
+                  src="data:<%= show.image.contentType %>;base64,<%= show.image.data.toString('base64') %>"
+                />
+              </td>
+              <td><%= show.name %></td>
+              <td><%= show.discription.substring(0, 101) %>...</td>
+              <td>
+                <a class="edit" href="/admin/band/edit/<%= show._id %>"
+                  ><i class="fa-solid fa-file-pen"></i
+                ></a>
+              </td>
+              <td>
+                <a class="delete" href="/admin/band/delete/<%= show._id %>"
+                  ><i class="fa-solid fa-trash"></i
+                ></a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>

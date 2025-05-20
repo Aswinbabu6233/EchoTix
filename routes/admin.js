@@ -77,13 +77,44 @@ router.get("/logout", (req, res) => {
 router.get("/dashboard", isAdmin, async (req, res) => {
   try {
     const admin = await User.findById(req.session.user._id);
-    const users = await User.find({});
-    const bands = await Band.find({});
-    const artists = await Artist.find({});
-    const concerts = await Concert.find({});
-    res.render("Admin/dashboard", { bands, artists, concerts, users, admin });
+
+    const users = await User.find({ role: "user" })
+      .sort({ createdAt: -1 })
+      .lean(); // Newest first
+    const bands = await Band.find({}).sort({ createdAt: -1 }).lean();
+    const artists = await Artist.find({})
+      .populate("band", "name") // populate only the 'name' field of the band
+      .sort({ createdAt: -1 })
+      .lean();
+    const concerts = await Concert.find({})
+      .populate("band")
+      .sort({ createdAt: -1 }) // or sort by 'date' if you prefer that
+      .lean();
+
+    const showusers = users.slice(0, 5);
+    const showbands = bands.slice(0, 5);
+    const showartists = artists.slice(0, 5);
+    const showconcerts = concerts.slice(0, 5);
+
+    res.render("Admin/dashboard", {
+      showbands,
+      showartists,
+      showconcerts,
+      showusers,
+      admin,
+    });
   } catch (error) {
     console.error("Error loading dashboard data:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.get("/bands", isAdmin, async (req, res) => {
+  try {
+    const bands = await Band.find({}).sort({ createdAt: -1 }).lean();
+    res.render("Admin/bandmanagement", { bands });
+  } catch (error) {
+    console.error("Error loading bands:", error);
     res.status(500).send("Server Error");
   }
 });
@@ -140,6 +171,21 @@ router.post(
   }
 );
 
+// artistmanagement
+
+router.get("/artists", isAdmin, async (req, res) => {
+  try {
+    const artists = await Artist.find({})
+      .populate("band") // populate only the 'name' field of the band
+      .sort({ createdAt: -1 })
+      .lean();
+    res.render("Admin/artistmanagement", { artists });
+  } catch (error) {
+    console.error("Error loading artists:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
 // GET /create/artist
 router.get("/create/artist", isAdmin, async (req, res) => {
   try {
@@ -191,6 +237,21 @@ router.post("/artists", isAdmin, upload.array("photos"), async (req, res) => {
     });
   }
 });
+
+// concertmanagement
+router.get("/concerts", isAdmin, async (req, res) => {
+  try {
+    const concerts = await Concert.find({})
+      .populate("band")
+      .sort({ createdAt: -1 })
+      .lean();
+    res.render("Admin/concertmanagement", { concerts });
+  } catch (error) {
+    console.error("Error loading concerts:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
 // concert creation
 router.get("/create/concerts", isAdmin, async (req, res) => {
   try {

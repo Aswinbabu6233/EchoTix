@@ -33,5 +33,188 @@
         <p>120</p>
       </div>
     </section>
+    <section class="recentandquick">
+      <div class="recentactivity">
+        <h2>Recent Activity</h2>
+        <div class="activity">
+          <span class="icon"><i class="fa-solid fa-user"></i></span>
+          <p>John Registered</p>
+        </div>
+        <div class="activity">
+          <span class="icon"><i class="fa-solid fa-ticket"></i></span>
+          <p>New Booking for Rock Night</p>
+        </div>
+        <div class="activity">
+          <span class="icon"><i class="fa-solid fa-calendar-xmark"></i></span>
+          <p>Concert date changed</p>
+        </div>
+        <div class="activity">
+          <span class="icon"><i class="fa-solid fa-xmark"></i></span>
+          <p>User deleted</p>
+        </div>
+        <div class="activity">
+          <span class="icon"><i class="fa-solid fa-music"></i></span>
+          <p>New Concert added</p>
+        </div>
+      </div>
+
+      <div class="quickaccess">
+        <h2>Quick Access</h2>
+        <div class="quickbtn">
+          <a href="/admin/settings"
+            ><i class="fa-solid fa-users"></i> Manage Artists</a
+          >
+          <a href="/admin/logout"
+            ><i class="fa-solid fa-guitar"></i> Manage Bands</a
+          >
+          <a href="/admin/bookings"
+            ><i class="fa-solid fa-ticket"></i> Manage Bookings</a
+          >
+          <a href="/admin/concerts"
+            ><i class="fa-solid fa-calendar-days"></i> Manage Concerts</a
+          >
+          <a href="/admin/users"
+            ><i class="fa-solid fa-user-gear"></i> Manage Users</a
+          >
+        </div>
+      </div>
+    </section>
+    <!-- recent 5 users -->
+    <section class="recentmanagements">
+      <div class="recent-top">
+        <h3>Recent Users</h3>
+        <span><a href="">View All</a></span>
+      </div>
+      <div class="managementstable">
+        <table>
+          <thead>
+            <tr>
+              <th>Profile Pic</th>
+              <th>Username</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% showusers.forEach(function(show) { %>
+            <tr>
+              <td>
+                <img
+                  src="data:<%= show.profileImage.contentType %>;base64,<%= show.profileImage.data.toString('base64') %>"
+                />
+              </td>
+              <td><%= show.username %></td>
+              <td><%= show.email %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- recent 5 concerts -->
+    <section class="recentmanagements">
+      <div class="recent-top">
+        <h3>Recent Concerts</h3>
+        <span><a href="">View All</a></span>
+      </div>
+      <div class="managementstable">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Venue</th>
+              <th>Date</th>
+              <th>city</th>
+              <th>ticketPrice</th>
+              <th>totalTickets</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% showconcerts.forEach(function(show) { %>
+            <tr>
+              <td>
+                <img
+                  src="data:<%= show.concertImage.contentType %>;base64,<%= show.concertImage.data.toString('base64') %>"
+                />
+              </td>
+              <td><%= show.title %></td>
+              <td><%= show.venue %></td>
+              <td>
+                <%= new Date(show.date).toLocaleDateString("en-US", { year:
+                'numeric', month: 'long', day: 'numeric' }) %>
+              </td>
+              <td><%= show.city %></td>
+              <td>₹<%= show.ticketPrice %></td>
+              <td><%= show.totalTickets %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- recent 5 bands -->
+    <section class="recentmanagements">
+      <div class="recent-top">
+        <h3>Recent Bands</h3>
+        <span><a href="">View All</a></span>
+      </div>
+      <div class="managementstable">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% showbands.forEach(function(show) { %>
+            <tr>
+              <td>
+                <img
+                  src="data:<%= show.image.contentType %>;base64,<%= show.image.data.toString('base64') %>"
+                />
+              </td>
+              <td><%= show.name %></td>
+              <td><%= show.discription.substring(0, 101) %>...</td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- recent 5 artists -->
+    <section class="recentmanagements">
+      <div class="recent-top">
+        <h3>Recent Artists</h3>
+        <span><a href="">View All</a></span>
+      </div>
+      <div class="managementstable">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Band</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% showartists.forEach(function(show) { %>
+            <tr>
+              <td>
+                <img
+                  src="data:<%= show.photo.contentType %>;base64,<%= show.photo.data.toString('base64') %>"
+                />
+              </td>
+              <td><%= show.name %></td>
+              <td><%= show.role %></td>
+              <td><%= show.band ? show.band.name : "N/A" %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </div>
